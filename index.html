@@ -243,30 +243,13 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="reportModalLabel">Transaction Report</h5>
+                    <h5 class="modal-title" id="reportModalLabel">Report</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="transaction-filter" class="form-label">Transaction Type</label>
-                        <select id="transaction-filter" class="form-select">
-                            <option value="all">All</option>
-                            <option value="credit">Credit</option>
-                            <option value="debit">Debit</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="start-date" class="form-label">Start Date</label>
-                        <input type="date" id="start-date" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="end-date" class="form-label">End Date</label>
-                        <input type="date" id="end-date" class="form-control">
-                    </div>
                     <h2>Total Credit: <span id="total-credit">0</span></h2>
                     <h2>Total Debit: <span id="total-debit">0</span></h2>
                     <h2>Balance: <span id="balance">0</span></h2>
-                    <canvas id="reportChart"></canvas> <!-- Chart.js canvas -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -274,108 +257,6 @@
             </div>
         </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        let transactions = [
-            { date: '2023-05-01', transactionType: 'credit', amount: 200, description: 'Payment received' },
-            { date: '2023-05-02', transactionType: 'debit', amount: 100, description: 'Payment made' },
-            { date: '2023-05-03', transactionType: 'credit', amount: 150, description: 'Payment received' },
-            { date: '2023-05-04', transactionType: 'debit', amount: 50, description: 'Payment made' },
-            // More sample transactions...
-        ];
-    
-        $(document).ready(function() {
-            // Event listener for changes in filters
-            $('#transaction-filter, #start-date, #end-date').change(function() {
-                calculateReport();
-            });
-    
-            function calculateReport() {
-                const filterType = $('#transaction-filter').val();
-                const startDate = $('#start-date').val();
-                const endDate = $('#end-date').val();
-                
-                let totalCredit = 0;
-                let totalDebit = 0;
-                let filteredTransactions = transactions;
-    
-                // Filter transactions by type (Credit or Debit)
-                if (filterType !== 'all') {
-                    filteredTransactions = transactions.filter(transaction => transaction.transactionType === filterType);
-                }
-    
-                // Filter transactions by date range
-                if (startDate) {
-                    filteredTransactions = filteredTransactions.filter(transaction => new Date(transaction.date) >= new Date(startDate));
-                }
-    
-                if (endDate) {
-                    filteredTransactions = filteredTransactions.filter(transaction => new Date(transaction.date) <= new Date(endDate));
-                }
-    
-                // Calculate total credit and debit
-                filteredTransactions.forEach(transaction => {
-                    if (transaction.transactionType === 'credit') {
-                        totalCredit += transaction.amount;
-                    } else {
-                        totalDebit += transaction.amount;
-                    }
-                });
-    
-                const balance = totalCredit - totalDebit;
-    
-                // Update totals in the modal
-                $('#total-credit').text(totalCredit);
-                $('#total-debit').text(totalDebit);
-                $('#balance').text(balance);
-    
-                updateChart(filteredTransactions);
-            }
-    
-            function updateChart(filteredTransactions) {
-                const labels = filteredTransactions.map(t => t.date);
-                const creditData = filteredTransactions.filter(t => t.transactionType === 'credit').map(t => t.amount);
-                const debitData = filteredTransactions.filter(t => t.transactionType === 'debit').map(t => t.amount);
-    
-                const ctx = document.getElementById('reportChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [
-                            {
-                                label: 'Credit',
-                                data: creditData,
-                                backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'Debit',
-                                data: debitData,
-                                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                                borderColor: 'rgba(255, 99, 132, 1)',
-                                borderWidth: 1
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            x: {
-                                beginAtZero: true
-                            },
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            }
-        });
-    </script>
-    
 
     <!-- Color Modal -->
     <div class="modal fade" id="colorModal" tabindex="-1" aria-labelledby="colorModalLabel" aria-hidden="true">
