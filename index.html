@@ -10,7 +10,7 @@
     <style>
         :root {
             --background-color: #87ceeb;
-            --text-color: #333;
+            --text-color: #333333;
             --accent-color: #4682b4;
         }
 
@@ -492,7 +492,7 @@
 
         // Load color settings from localStorage
         const savedBackgroundColor = localStorage.getItem('background-color') || '#87ceeb';
-        const savedTextColor = localStorage.getItem('text-color') || '#333';
+        const savedTextColor = localStorage.getItem('text-color') || '#333333';
         const savedAccentColor = localStorage.getItem('accent-color') || '#4682b4';
 
         document.documentElement.style.setProperty('--background-color', savedBackgroundColor);
