@@ -239,41 +239,40 @@
         </div>
     </div>
 
-    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reportModalLabel">Transaction Report</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="transaction-filter" class="form-label">Transaction Type</label>
-                        <select id="transaction-filter" class="form-select">
-                            <option value="all">All</option>
-                            <option value="credit">Credit</option>
-                            <option value="debit">Debit</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="start-date" class="form-label">Start Date</label>
-                        <input type="date" id="start-date" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="end-date" class="form-label">End Date</label>
-                        <input type="date" id="end-date" class="form-control">
-                    </div>
-                    <h2>Total Credit: <span id="total-credit">0</span></h2>
-                    <h2>Total Debit: <span id="total-debit">0</span></h2>
-                    <h2>Balance: <span id="balance">0</span></h2>
-                    <canvas id="reportChart"></canvas> <!-- Chart.js canvas -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+   <!-- Transaction History Modal -->
+<div class="modal fade" id="transactionDetailsModal" tabindex="-1" aria-labelledby="transactionDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transactionDetailsModalLabel">Transaction History</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+                <p id="transaction-history-date"></p>
+                <p id="transaction-history-type"></p>
+                <p id="transaction-history-amount"></p>
+                <p id="transaction-history-description"></p>
+            </div>
+           
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="share-whatsapp-btn">
+                    Share via WhatsApp
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+            
         </div>
     </div>
+</div>
+
+<style>
+    /* Hover effect for transaction rows */
+    tr:hover {
+        background-color: #393535; /* Light gray background on hover */
+        cursor: pointer;
+        color: white; /* Hand cursor to indicate clickability */
+    }
+</style>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -471,21 +470,57 @@
 
         // Populate transaction table
         function populateTransactionTable() {
-            transactionTableBody.innerHTML = '';
+    transactionTableBody.innerHTML = '';  // Clear the table body before adding new rows
 
-            transactionsData.forEach(transaction => {
-                if (transaction.username === loggedInUser.username) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${transaction.date}</td>
-                        <td>${transaction.type}</td>
-                        <td>${transaction.amount}</td>
-                        <td>${transaction.description}</td>
-                    `;
-                    transactionTableBody.appendChild(row);
-                }
-            });
+    transactionsData.forEach(transaction => {
+        if (transaction.username === loggedInUser.username) {
+            const row = document.createElement('tr');
+
+            // Add a 'click' event listener to each row
+            row.addEventListener('click', () => showTransactionHistory(transaction));
+
+            row.innerHTML = `
+                <td>${transaction.date}</td>
+                <td>${transaction.type}</td>
+                <td>${transaction.amount}</td>
+                <td>${transaction.description}</td>
+            `;
+
+            // Append the row to the table body
+            transactionTableBody.appendChild(row);
         }
+    });
+}
+
+// Function to show transaction history details
+function showTransactionHistory(transaction) {
+    // Assuming you have a modal to display the transaction history details
+    const transactionDetailsModal = new bootstrap.Modal(document.getElementById("transactionDetailsModal"));
+
+    // Set the details in the modal (or any other element to show the transaction history)
+    document.getElementById("transaction-history-date").textContent = `Date: ${transaction.date}`;
+    document.getElementById("transaction-history-type").textContent = `Type: ${transaction.type}`;
+    document.getElementById("transaction-history-amount").textContent = `Amount: ${transaction.amount}`;
+    document.getElementById("transaction-history-description").textContent = `Description: ${transaction.description}`;
+
+     document.getElementById("share-whatsapp-btn").addEventListener('click', () => {
+        const transactionText = `
+            Transaction Details:
+            Date: ${transaction.date}
+            Type: ${transaction.type}
+            Amount: ${transaction.amount}
+            Description: ${transaction.description}
+        `;
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(transactionText)}`;
+        
+        // Open WhatsApp
+        window.open(whatsappUrl, '_blank');
+    });
+
+    // Show the modal with the transaction details
+    transactionDetailsModal.show();
+}
+
 
         // Handle login
         loginBtn.addEventListener('click', () => {
