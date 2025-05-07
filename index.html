@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,16 +13,20 @@
             --text-color: #333;
             --accent-color: #4682b4;
         }
+
         body {
             font-family: Arial, sans-serif;
             background-color: var(--background-color);
         }
+
         .nav-link {
             color: var(--text-color);
         }
+
         .nav-link:hover {
             color: var(--accent-color);
         }
+
         .transaction-table {
             margin-top: 20px;
             background-color: #fff;
@@ -30,6 +35,7 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .modal-content {
             background-color: #fff;
             border: 1px solid #ddd;
@@ -37,33 +43,43 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .modal-header {
             background-color: #f0f0f0;
             border-bottom: 1px solid #ddd;
             padding: 10px;
             border-radius: 10px 10px 0 0;
         }
+
         .modal-footer {
             background-color: #f0f0f0;
             border-top: 1px solid #ddd;
             padding: 10px;
             border-radius: 0 0 10px 10px;
         }
+
         .btn-primary {
             background-color: var(--accent-color);
             border-color: var(--accent-color);
         }
+
         .btn-primary:hover {
             background-color: #6495ed;
             border-color: #6495ed;
         }
+
+        .error-message {
+            color: red;
+        }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Khata Book App</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="#">Cash Track App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -72,10 +88,13 @@
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal" id="login-link">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Register</a>
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal" id="register-link">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logout-link" style="display: none;">Logout</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#colorModal">Colors</a>
@@ -84,20 +103,21 @@
             </div>
         </div>
     </nav>
+
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12">
-                <h1 class="text-center">Khata Book App</h1>
+                <h1 class="text-center">Cash Track App</h1>
             </div>
         </div>
         <div class="row mt-5">
             <div class="col-md-12">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTransactionModal">Add Transaction</button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTransactionModal" id="add-transaction-btn" style="display: none;">Add Transaction</button>
             </div>
         </div>
         <div class="row mt-5">
             <div class="col-md-12">
-                <div class="transaction-table">
+                <div class="transaction-table" id="transaction-table" style="display: none;">
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -115,10 +135,11 @@
         </div>
         <div class="row mt-5">
             <div class="col-md-12">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reportModal">Generate Report</button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reportModal" id="report-btn" style="display: none;">Generate Report</button>
             </div>
         </div>
     </div>
+
     <!-- Modals -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -131,12 +152,13 @@
                     <form>
                         <div class="mb-3">
                             <label for="username" class="col-form-label">Username:</label>
-                            <input type="text" class="form-control" id="username" placeholder="Enter username">
+                            <input type="text" class="form-control" id="login-username" placeholder="Enter username">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="col-form-label">Password:</label>
-                            <input type="password" class="form-control" id="password" placeholder="Enter password">
+                            <input type="password" class="form-control" id="login-password" placeholder="Enter password">
                         </div>
+                        <p class="error-message" id="login-error-message"></p>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -146,6 +168,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -157,16 +180,17 @@
                     <form>
                         <div class="mb-3">
                             <label for="username" class="col-form-label">Username:</label>
-                            <input type="text" class="form-control" id="username" placeholder="Enter username">
+                            <input type="text" class="form-control" id="register-username" placeholder="Enter username">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="col-form-label">Password:</label>
-                            <input type="password" class="form-control" id="password" placeholder="Enter password">
+                            <input type="password" class="form-control" id="register-password" placeholder="Enter password">
                         </div>
                         <div class="mb-3">
                             <label for="confirm-password" class="col-form-label">Confirm Password:</label>
-                            <input type="password" class="form-control" id="confirm-password" placeholder="Confirm password">
+                            <input type="password" class="form-control" id="register-confirm-password" placeholder="Confirm password">
                         </div>
+                        <p class="error-message" id="register-error-message"></p>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -176,6 +200,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="addTransactionModal" tabindex="-1" aria-labelledby="addTransactionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -208,22 +233,40 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="add-transaction-btn">Add Transaction</button>
+                    <button type="button" class="btn btn-primary" id="add-transaction-btn-modal">Add Transaction</button>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="reportModalLabel">Report</h5>
+                    <h5 class="modal-title" id="reportModalLabel">Transaction Report</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="transaction-filter" class="form-label">Transaction Type</label>
+                        <select id="transaction-filter" class="form-select">
+                            <option value="all">All</option>
+                            <option value="credit">Credit</option>
+                            <option value="debit">Debit</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="start-date" class="form-label">Start Date</label>
+                        <input type="date" id="start-date" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="end-date" class="form-label">End Date</label>
+                        <input type="date" id="end-date" class="form-control">
+                    </div>
                     <h2>Total Credit: <span id="total-credit">0</span></h2>
                     <h2>Total Debit: <span id="total-debit">0</span></h2>
                     <h2>Balance: <span id="balance">0</span></h2>
+                    <canvas id="reportChart"></canvas> <!-- Chart.js canvas -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -231,103 +274,356 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="colorModal" tabindex="-1" aria-labelledby="colorModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="colorModalLabel">Colors</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="background-color" class="col-form-label">Background Color:</label>
-                            <input type="color" class="form-control" id="background-color" value="#87ceeb">
-                        </div>
-                        <div class="mb-3">
-                            <label for="text-color" class="col-form-label">Text Color:</label>
-                            <input type="color" class="form-control" id="text-color" value="#333">
-                        </div>
-                        <div class="mb-3">
-                            <label for="accent-color" class="col-form-label">Accent Color:</label>
-                            <input type="color" class="form-control" id="accent-color" value="#4682b4">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="save-colors-btn">Save Colors</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/slim-select@1.27.0/dist/slimselect.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        let transactions = [];
-        let loggedIn = false;
-        let username = '';
+        let transactions = [
+            { date: '2023-05-01', transactionType: 'credit', amount: 200, description: 'Payment received' },
+            { date: '2023-05-02', transactionType: 'debit', amount: 100, description: 'Payment made' },
+            { date: '2023-05-03', transactionType: 'credit', amount: 150, description: 'Payment received' },
+            { date: '2023-05-04', transactionType: 'debit', amount: 50, description: 'Payment made' },
+            // More sample transactions...
+        ];
+    
         $(document).ready(function() {
-            $('#login-btn').click(function() {
-                username = $('#username').val();
-                let password = $('#password').val();
-                if (username === 'admin' && password === 'password') {
-                    loggedIn = true;
-                    $('#loginModal').modal('hide');
-                }
-            });
-            $('#register-btn').click(function() {
-                username = $('#username').val();
-                let password = $('#password').val();
-                let confirmPassword = $('#confirm-password').val();
-                if (password === confirmPassword) {
-                    loggedIn = true;
-                    $('#registerModal').modal('hide');
-                }
-            });
-            $('#add-transaction-btn').click(function() {
-                let date = $('#date').val();
-                let transactionType = $('#transaction-type').val();
-                let amount = parseFloat($('#amount').val());
-                let description = $('#description').val();
-                transactions.push({ date, transactionType, amount, description });
-                $('#transaction-table-body').append(`
-                    <tr>
-                        <td>${date}</td>
-                        <td>${transactionType}</td>
-                        <td>${amount}</td>
-                        <td>${description}</td>
-                    </tr>
-                `);
-                $('#addTransactionModal').modal('hide');
+            // Event listener for changes in filters
+            $('#transaction-filter, #start-date, #end-date').change(function() {
                 calculateReport();
             });
+    
             function calculateReport() {
+                const filterType = $('#transaction-filter').val();
+                const startDate = $('#start-date').val();
+                const endDate = $('#end-date').val();
+                
                 let totalCredit = 0;
                 let totalDebit = 0;
-                for (let transaction of transactions) {
+                let filteredTransactions = transactions;
+    
+                // Filter transactions by type (Credit or Debit)
+                if (filterType !== 'all') {
+                    filteredTransactions = transactions.filter(transaction => transaction.transactionType === filterType);
+                }
+    
+                // Filter transactions by date range
+                if (startDate) {
+                    filteredTransactions = filteredTransactions.filter(transaction => new Date(transaction.date) >= new Date(startDate));
+                }
+    
+                if (endDate) {
+                    filteredTransactions = filteredTransactions.filter(transaction => new Date(transaction.date) <= new Date(endDate));
+                }
+    
+                // Calculate total credit and debit
+                filteredTransactions.forEach(transaction => {
                     if (transaction.transactionType === 'credit') {
                         totalCredit += transaction.amount;
                     } else {
                         totalDebit += transaction.amount;
                     }
-                }
-                let balance = totalCredit - totalDebit;
+                });
+    
+                const balance = totalCredit - totalDebit;
+    
+                // Update totals in the modal
                 $('#total-credit').text(totalCredit);
                 $('#total-debit').text(totalDebit);
                 $('#balance').text(balance);
+    
+                updateChart(filteredTransactions);
             }
-            $('#save-colors-btn').click(function() {
-                let backgroundColor = $('#background-color').val();
-                let textColor = $('#text-color').val();
-                let accentColor = $('#accent-color').val();
-                document.documentElement.style.setProperty('--background-color', backgroundColor);
-                document.documentElement.style.setProperty('--text-color', textColor);
-                document.documentElement.style.setProperty('--accent-color', accentColor);
-                $('#colorModal').modal('hide');
-            });
+    
+            function updateChart(filteredTransactions) {
+                const labels = filteredTransactions.map(t => t.date);
+                const creditData = filteredTransactions.filter(t => t.transactionType === 'credit').map(t => t.amount);
+                const debitData = filteredTransactions.filter(t => t.transactionType === 'debit').map(t => t.amount);
+    
+                const ctx = document.getElementById('reportChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Credit',
+                                data: creditData,
+                                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Debit',
+                                data: debitData,
+                                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                beginAtZero: true
+                            },
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
         });
     </script>
+    
+
+    <!-- Color Modal -->
+    <div class="modal fade" id="colorModal" tabindex="-1" aria-labelledby="colorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="colorModalLabel">Change Colors</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="background-color">Background Color:</label>
+                        <input type="color" class="form-control" id="background-color" value="#87ceeb">
+                    </div>
+                    <div class="form-group mt-2">
+                        <label for="text-color">Text Color:</label>
+                        <input type="color" class="form-control" id="text-color" value="#333">
+                    </div>
+                    <div class="form-group mt-2">
+                        <label for="accent-color">Accent Color:</label>
+                        <input type="color" class="form-control" id="accent-color" value="#4682b4">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save-color-btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slim-select@1.27.0/dist/slimselect.min.js"></script>
+
+    <script>
+        // Retrieve data from localStorage if it exists
+        const usersData = JSON.parse(localStorage.getItem('usersData')) || [];
+        const transactionsData = JSON.parse(localStorage.getItem('transactionsData')) || [];
+
+        let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser')) || null;
+
+        // DOM elements
+        const loginLink = document.getElementById('login-link');
+        const registerLink = document.getElementById('register-link');
+        const logoutLink = document.getElementById('logout-link');
+        const addTransactionBtn = document.getElementById('add-transaction-btn');
+        const transactionTable = document.getElementById('transaction-table');
+        const reportBtn = document.getElementById('report-btn');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const loginModal = document.getElementById('loginModal');
+        const registerModal = document.getElementById('registerModal');
+        const loginErrorMessage = document.getElementById('login-error-message');
+        const registerErrorMessage = document.getElementById('register-error-message');
+        const addTransactionModal = document.getElementById('addTransactionModal');
+        const transactionTableBody = document.getElementById('transaction-table-body');
+        const addTransactionBtnModal = document.getElementById('add-transaction-btn-modal');
+        const reportModal = document.getElementById('reportModal');
+        const totalCredit = document.getElementById('total-credit');
+        const totalDebit = document.getElementById('total-debit');
+        const balance = document.getElementById('balance');
+        const colorModal = document.getElementById('colorModal');
+        const backgroundColor = document.getElementById('background-color');
+        const textColor = document.getElementById('text-color');
+        const accentColor = document.getElementById('accent-color');
+        const saveColorBtn = document.getElementById('save-color-btn');
+
+        // Update the UI based on logged in status
+        function updateUI() {
+            if (loggedInUser) {
+                // Show logged-in UI
+                loginLink.style.display = 'none';
+                registerLink.style.display = 'none';
+                logoutLink.style.display = 'block';
+                addTransactionBtn.style.display = 'block';
+                transactionTable.style.display = 'block';
+                reportBtn.style.display = 'block';
+
+                // Populate the transaction table
+                populateTransactionTable();
+
+            } else {
+                // Show logged-out UI
+                loginLink.style.display = 'block';
+                registerLink.style.display = 'block';
+                logoutLink.style.display = 'none';
+                addTransactionBtn.style.display = 'none';
+                transactionTable.style.display = 'none';
+                reportBtn.style.display = 'none';
+            }
+        }
+
+        // Populate transaction table
+        function populateTransactionTable() {
+            transactionTableBody.innerHTML = '';
+
+            transactionsData.forEach(transaction => {
+                if (transaction.username === loggedInUser.username) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${transaction.date}</td>
+                        <td>${transaction.type}</td>
+                        <td>${transaction.amount}</td>
+                        <td>${transaction.description}</td>
+                    `;
+                    transactionTableBody.appendChild(row);
+                }
+            });
+        }
+
+        // Handle login
+        loginBtn.addEventListener('click', () => {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            const user = usersData.find(user => user.username === username && user.password === password);
+
+            if (user) {
+                loggedInUser = user;
+                localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+                localStorage.setItem('transactionsData', JSON.stringify(transactionsData));
+                updateUI();
+                const bootstrapModal = bootstrap.Modal.getInstance(loginModal);
+                bootstrapModal.hide();
+            } else {
+                loginErrorMessage.textContent = 'Invalid credentials';
+            }
+        });
+
+        // Handle register
+        registerBtn.addEventListener('click', () => {
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+
+            if (password !== confirmPassword) {
+                registerErrorMessage.textContent = 'Passwords do not match';
+                return;
+            }
+
+            const existingUser = usersData.find(user => user.username === username);
+            if (existingUser) {
+                registerErrorMessage.textContent = 'Username already exists';
+                return;
+            }
+
+            const newUser = {
+                username: username,
+                password: password
+            };
+            usersData.push(newUser);
+            localStorage.setItem('usersData', JSON.stringify(usersData));
+            loggedInUser = newUser;
+            localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+
+            updateUI();
+            const bootstrapModal = bootstrap.Modal.getInstance(registerModal);
+            bootstrapModal.hide();
+        });
+
+        // Handle logout
+        logoutLink.addEventListener('click', () => {
+            loggedInUser = null;
+            localStorage.removeItem('loggedInUser');
+            updateUI();
+        });
+
+        // Add new transaction
+        addTransactionBtnModal.addEventListener('click', () => {
+            const date = document.getElementById('date').value;
+            const type = document.getElementById('transaction-type').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const description = document.getElementById('description').value;
+
+            if (date && type && amount && description) {
+                const transaction = {
+                    date: date,
+                    type: type,
+                    amount: amount,
+                    description: description,
+                    username: loggedInUser.username
+                };
+
+                transactionsData.push(transaction);
+                localStorage.setItem('transactionsData', JSON.stringify(transactionsData));
+
+                populateTransactionTable();
+
+                const bootstrapModal = bootstrap.Modal.getInstance(addTransactionModal);
+                bootstrapModal.hide();
+            }
+        });
+
+        // Generate report
+        reportBtn.addEventListener('click', () => {
+            let totalCreditAmount = 0;
+            let totalDebitAmount = 0;
+
+            transactionsData.forEach(transaction => {
+                if (transaction.username === loggedInUser.username) {
+                    if (transaction.type === 'credit') {
+                        totalCreditAmount += transaction.amount;
+                    } else {
+                        totalDebitAmount += transaction.amount;
+                    }
+                }
+            });
+
+            const currentBalance = totalCreditAmount - totalDebitAmount;
+
+            totalCredit.textContent = totalCreditAmount;
+            totalDebit.textContent = totalDebitAmount;
+            balance.textContent = currentBalance;
+        });
+
+        // Save color settings
+        saveColorBtn.addEventListener('click', () => {
+            const backgroundColorValue = backgroundColor.value;
+            const textColorValue = textColor.value;
+            const accentColorValue = accentColor.value;
+
+            localStorage.setItem('background-color', backgroundColorValue);
+            localStorage.setItem('text-color', textColorValue);
+            localStorage.setItem('accent-color', accentColorValue);
+
+            document.documentElement.style.setProperty('--background-color', backgroundColorValue);
+            document.documentElement.style.setProperty('--text-color', textColorValue);
+            document.documentElement.style.setProperty('--accent-color', accentColorValue);
+
+            const bootstrapModal = bootstrap.Modal.getInstance(colorModal);
+            bootstrapModal.hide();
+        });
+
+        // Load color settings from localStorage
+        const savedBackgroundColor = localStorage.getItem('background-color') || '#87ceeb';
+        const savedTextColor = localStorage.getItem('text-color') || '#333';
+        const savedAccentColor = localStorage.getItem('accent-color') || '#4682b4';
+
+        document.documentElement.style.setProperty('--background-color', savedBackgroundColor);
+        document.documentElement.style.setProperty('--text-color', savedTextColor);
+        document.documentElement.style.setProperty('--accent-color', savedAccentColor);
+
+        backgroundColor.value = savedBackgroundColor;
+        textColor.value = savedTextColor;
+        accentColor.value = savedAccentColor;
+
+        updateUI();
+    </script>
 </body>
+
 </html>
